@@ -35,7 +35,6 @@ export const Register = ({setToken}) => {
             if ("token" in res) {
               localStorage.setItem("lu_token", res.token)
               localStorage.setItem("token", res.token )       // added for testing
-              console.log("Created successfully")             // added for testing
               history.push("/")
           // }
             
@@ -111,6 +110,10 @@ export const Register = ({setToken}) => {
             <Link to="/login" className="button is-link is-light">Cancel</Link>
           </div>
         </div>
+
+        <section className="link--register">
+                <Link to="/login">Already a member? Then go login</Link>
+            </section>
 
       </form>
     </section>

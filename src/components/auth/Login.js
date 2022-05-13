@@ -55,6 +55,10 @@ export const Login = ({ setToken }) => {
             <Link to="/register" className="button is-link is-light">Cancel</Link>
           </div>
         </div>
+        <section className="link--register">
+                <Link to="/register">Not a member yet?</Link>
+            </section>
+
         {
           isUnsuccessful ? <p className="help is-danger">Username or password not valid</p> : ''
         }
