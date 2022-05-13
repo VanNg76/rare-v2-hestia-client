@@ -174,13 +174,13 @@ export const AllPosts = () => {
             </select>
         </fieldset>
 
-        <div className="singlePost">
+        {/* <div className="singlePost">
             <div>Title</div>
             <div>Author</div>
             <div>Publication Date</div>
             <div>Category</div>
             <div>Tags</div>
-        </div>
+        </div> */}
         {
             posts.length > 0
                 ? posts.map((post) => {
