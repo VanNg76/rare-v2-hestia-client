@@ -1,8 +1,8 @@
 // fetch all the tags
+import { fetchIt } from "../utils/Fetch"
 
 const API = 'http://localhost:8088'
 
 export const getAllTags = () => {
-  return fetch(`${API}/tags`)
-    .then((res) => res.json())
+  return fetchIt(`${API}/tags`)
 }
