@@ -30,15 +30,14 @@ export const Register = ({setToken}) => {
 
       registerUser(newUser)
         .then(res => {
-          // if ("valid" in res && res.valid) {
-          //   setToken(res.token)
+           setToken(res.token)
             if ("token" in res) {
               localStorage.setItem("lu_token", res.token)
-              localStorage.setItem("token", res.token )       // added for testing
+              localStorage.setItem("token", res.token )       
               history.push("/")
-          // }
-            
           }
+            
+
         })
     } else {
       passwordDialog.current.showModal()
