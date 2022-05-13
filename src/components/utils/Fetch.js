@@ -14,7 +14,8 @@ export const fetchIt = (url, method = "GET", body = null) => {
         case "POST":
         case "PUT":
             options.headers = {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Token ${localStorage.getItem("token")}`
             }
             break;
         default:
