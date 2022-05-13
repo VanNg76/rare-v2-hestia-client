@@ -3,8 +3,7 @@ import { Settings } from "../utils/Settings"
 
 
 export const getAllPosts = () => {
-  return fetch(`${Settings.API}/posts`)
-    .then((res) => res.json())
+  return fetchIt(`${Settings.API}/posts`)
 }
 
 // export function that fetches single post, needs param to take id as arg, then parse from json to js
@@ -63,11 +62,9 @@ export const getPostsByTag = (id) => {
 // };
 
 export const searchPostTitles = titleString => {
-  return fetch(`http://localhost:8088/posts?title=${titleString}`)
-    .then(res => res.json())
+  return fetchIt(`http://localhost:8088/posts?title=${titleString}`)
 };
 
 export const searchPostCategories = categoryId => {
-  return fetch(`http://localhost:8088/posts?category=${categoryId}`)
-    .then(res => res.json())
+  return fetchIt(`http://localhost:8088/posts?category=${categoryId}`)
 };
