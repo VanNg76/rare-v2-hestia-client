@@ -71,16 +71,16 @@ export const CreatePosts = ({ getPosts, editing }) => {
             tagsToAdd = form.tags.map(tag => tag.id)
         }
         const newPost = {
-            userId: parseInt(localStorage.getItem("token")),
-            categoryId: form.categoryId,
+            // userId: parseInt(localStorage.getItem("token")),
+            category_id: form.category_id,
             title: form.title,
-            publicationDate: (new Date()).toISOString().split('T')[0],
-            imageUrl: form.imageUrl,
+            publication_date: (new Date()).toISOString().split('T')[0],
+            image_url: form.image_url,
             content: form.content,
             approved: 1,
             tags: tagsToAdd
         }
-        if(newPost.title && newPost.imageUrl && newPost.categoryId && newPost.tags.length > 0) {
+        if(newPost.title && newPost.image_url && newPost.category_id) {
             if (editing) {
                 newPost.id = parseInt(postId)
                 return fetchIt(`${Settings.API}/posts/${postId}`, "PUT", JSON.stringify(newPost))
@@ -122,11 +122,11 @@ export const CreatePosts = ({ getPosts, editing }) => {
                         type="text" id="post"
                         className="form-control"
                         placeholder="Image URL"
-                        value={form.imageUrl}
+                        value={form.image_url}
                         onChange={
                             (e) => {
                                 const copy = { ...form }
-                                copy.imageUrl = e.target.value
+                                copy.image_url = e.target.value
                                 updateForm(copy)
                             }
                         }
@@ -161,16 +161,16 @@ export const CreatePosts = ({ getPosts, editing }) => {
                     <select name="category"
                         onChange={(e) => {
                             const copy = { ...form }
-                            copy.categoryId = parseInt(e.target.value)
+                            copy.category_id = parseInt(e.target.value)
                             updateForm(copy)
                         }}
-                        defaultValue="0" value={form.categoryId}>
+                        defaultValue="0" value={form.category_id}>
                         <option value="0" hidden>Category Select</option>
                         {
                             categories.map(
                                 (c) => {
                                     return (
-                                        <option key={`categoryId--${c.id}`} value={`${c.id}`}>
+                                        <option key={`category_id--${c.id}`} value={`${c.id}`}>
                                             {`${c.label}`}
                                         </option>
                                     )
@@ -183,7 +183,7 @@ export const CreatePosts = ({ getPosts, editing }) => {
 
 
 
-            {tags.map(tag => {
+            {tags?.map(tag => {
                 // logic to determine whether box should be pre-checked
                 let checked_status = false
                 if ("tags" in form) {
@@ -215,7 +215,7 @@ export const CreatePosts = ({ getPosts, editing }) => {
             <div className="submitButtonCreateNewPostForm">
                 <button onClick={(e) => {
                     submitPost(e)
-                    updateForm({ title: "", imageUrl: "", content: "", categoryId: "0" })
+                    updateForm({ title: "", image_url: "", content: "", category_id: "0" })
                 }} className="submit-button">
                     Submit
                 </button>
