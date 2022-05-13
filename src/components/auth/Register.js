@@ -26,13 +26,18 @@ export const Register = ({setToken}) => {
         password: password.current.value,
         bio: bio.current.value
       }
+        
 
       registerUser(newUser)
         .then(res => {
-          if ("valid" in res && res.valid) {
-            setToken(res.token)
-            history.push("/")
+           setToken(res.token)
+            if ("token" in res) {
+              localStorage.setItem("lu_token", res.token)
+              localStorage.setItem("token", res.token )       
+              history.push("/")
           }
+            
+
         })
     } else {
       passwordDialog.current.showModal()
@@ -104,6 +109,10 @@ export const Register = ({setToken}) => {
             <Link to="/login" className="button is-link is-light">Cancel</Link>
           </div>
         </div>
+
+        <section className="link--register">
+                <Link to="/login">Already a member? Then go login</Link>
+            </section>
 
       </form>
     </section>
