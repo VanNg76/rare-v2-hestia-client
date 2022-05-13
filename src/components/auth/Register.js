@@ -26,6 +26,7 @@ export const Register = ({setToken}) => {
         password: password.current.value,
         bio: bio.current.value
       }
+        
 
       registerUser(newUser)
         .then(res => {
