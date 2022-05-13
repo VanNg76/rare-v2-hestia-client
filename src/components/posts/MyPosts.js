@@ -19,7 +19,7 @@ export const MyPosts = () => {
             posts.map(post => {
                 return <div key={`post-${post.id}`}>
                     <Post listView={true} cardView={true} post={post} />
-                </div> 
+                </div>
             })
         }
     </>

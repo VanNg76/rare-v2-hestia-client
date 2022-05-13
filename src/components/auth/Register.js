@@ -32,7 +32,11 @@ export const Register = ({setToken}) => {
         .then(res => {
           if ("valid" in res && res.valid) {
             setToken(res.token)
-            history.push("/")
+            if ("token" in res) {
+              localStorage.setItem("lu_token", res.token)
+              history.push("/")
+          }
+            
           }
         })
     } else {
