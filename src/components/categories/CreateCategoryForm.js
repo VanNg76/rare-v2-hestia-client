@@ -83,13 +83,21 @@ export const NewCategoryForm = ({ getCategories, editing }) => {
                         }
                     />
                     <div className="submitButtonCreateNewCategoryForm">
-
+                        {editing ?
+                        <button onClick={(e) => {
+                            submitNewCategory(e)
+                            updateForm({ label: "" })
+                        }} className="submit-button">
+                            Save
+                        </button>
+                        :
                         <button onClick={(e) => {
                             submitNewCategory(e)
                             updateForm({ label: "" })
                         }} className="submit-button">
                             Submit
                         </button>
+                        }
                         {editing ?
                             <button onClick={() => {
                                 history.push("/categories")
