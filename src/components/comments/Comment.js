@@ -31,6 +31,7 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments }) =
             */}
         <div>{commentObject.content}</div>
         <div>{commentObject.author.user.username}</div>
+        <div>{commentObject.created_on}</div>
         {
             currentAuthor
                 ? <div>

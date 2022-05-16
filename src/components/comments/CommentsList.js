@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import { Comment } from "./Comment"
 import { CommentForm } from "./CommentForm"
 import { getCommentsByPostId } from "./CommentManager"
+import "./Comments.css"
 
 
 // export component CommentList that is a single post's comments
@@ -51,13 +52,13 @@ export const CommentList = ({ postId }) => {
 
 
     return <>
-    Comments
     {/* <CommentForm postId={postId} /> */}
     <CommentForm postId={postId} getComments={getComments}/>
     {/*
         map over comments and invoke comment component
         other needed JSX tags for styling
     */}
+    <h1 className="comments-header">Comments</h1>
     {
         comments.map(comment => {
             let currentAuthor = comment.is_author
