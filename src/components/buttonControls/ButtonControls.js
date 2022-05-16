@@ -67,8 +67,16 @@ export const ButtonControls = ({ isPost, isCategory, postId, commentId, category
           onClick={
             (e) => {
               e.preventDefault()
-              const buttonTarget = document.querySelector(`#anything-${postId}`)
-              buttonTarget.close()
+              if (isPost) {
+                const buttonTarget = document.querySelector(`#anything-${postId}`)
+                buttonTarget.close()
+                } else if (isCategory) {
+                const buttonTarget = document.querySelector(`#anything-${categoryId}`)
+                buttonTarget.close()
+                } else {
+                 const buttonTarget = document.querySelector(`#anything-${commentId}`)
+                 buttonTarget.close()
+                }
             }
           }
         >Cancel
@@ -97,8 +105,16 @@ export const ButtonControls = ({ isPost, isCategory, postId, commentId, category
     className="category_delete"
     onClick={() => {
       console.log(categoryId)
+      if (isPost) {
+      const buttonTarget = document.querySelector(`#anything-${postId}`)
+      buttonTarget.showModal()
+      } else if (isCategory) {
       const buttonTarget = document.querySelector(`#anything-${categoryId}`)
       buttonTarget.showModal()
+      } else {
+       const buttonTarget = document.querySelector(`#anything-${commentId}`)
+       buttonTarget.showModal()
+      }
     }}>
       {isCategory ?
         <div>Delete</div>
