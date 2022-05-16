@@ -31,7 +31,7 @@ export const User = ({ listView, user }) => {
     useEffect(
         () => {
             if(viewUser) {
-                let count = viewUser.posts.length
+                let count = viewUser.posts?.length
                 setPostCount(count)
             }
         }, [viewUser]
@@ -65,20 +65,20 @@ export const User = ({ listView, user }) => {
             ? <div className="singleUser">
                 <div>
                     <Link to={`/users/${user.id}`}>
-                    {user.username}
+                    {user.user.username}
                     </Link>
                 </div>
-                <div>{user.firstName}</div>
-                <div>{user.lastName}</div>
-                <div>{user.email}</div>
+                <div>{user.user.first_name}</div>
+                <div>{user.user.last_name}</div>
+                <div>{user.user.email}</div>
             </div> 
             : viewUser
                 ? <div>
-                    <div>Picture: <img src={`${viewUser.profileImageUrl || "https://m.media-amazon.com/images/I/91xDQaUMubS._AC_SL1500_.jpg"}`} width={300} height={300} /></div>
-                    <div>Name: {viewUser.firstName} {viewUser.lastName}</div>
-                    <div>Username: {viewUser.username}</div>
-                    <div>Email: {viewUser.email}</div>
-                    <div>Creation Date: {viewUser.createdOn}</div>
+                    <div>Picture: <img src={`${viewUser.user?.profileImageUrl || "https://m.media-amazon.com/images/I/91xDQaUMubS._AC_SL1500_.jpg"}`} width={300} height={300} /></div>
+                    <div>Name: {viewUser.user.first_name} {viewUser.user.last_name}</div>
+                    <div>Username: {viewUser.user.username}</div>
+                    <div>Email: {viewUser.user.email}</div>
+                    <div>Creation Date: {viewUser.user.date_joined}</div>
                     <div>Profile Type: Author</div>
                     <div>
                         <Link to={`/posts/user/${viewUser.id}`}>

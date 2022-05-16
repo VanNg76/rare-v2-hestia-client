@@ -27,14 +27,14 @@ export const UserList = () => {
 
     // return jsx
     return <>
-    <div className="singleUser">
+    {/* <div className="singleUser">
         <div>Username</div>
         <div>First Name</div>
         <div>Last Name</div>
         <div>Email</div>
-    </div>
+    </div> */}
     {
-        users.map(user => {
+        users?.map(user => {
             return <div key={`user-${user.id}`}>
                 <User user={user} listView={true} />
             </div>
