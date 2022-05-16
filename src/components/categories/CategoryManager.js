@@ -9,3 +9,7 @@ export const getAllCategories = () => {
 export const createCategory = (newCategory) => {
   return fetchIt(`${Settings.API}/categories`, "POST", JSON.stringify(newCategory))
 }
+
+export const deleteCategory = (categoryId) => {
+  return fetchIt(`${Settings.API}/categories/${categoryId}`, "DELETE")
+}

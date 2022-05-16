@@ -1,19 +1,24 @@
 import { Settings } from "../utils/Settings"
 import { deleteComment } from "../comments/CommentManager"
 import { deletePost } from "../posts/PostManager"
+import { deleteCategory } from "../categories/CategoryManager"
 import { useHistory } from "react-router-dom"
+import "./ButtonControls.css"
 
-export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
+export const ButtonControls = ({ isPost, isCategory, postId, commentId, categoryId, getComments, getCategories }) => {
   const history = useHistory()
 
   return <div>
-    <dialog id={`anything-${isPost}`}>
+    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : `anything-${commentId}`}>
       {
         isPost
-        ? <div>Are you sure you want to delete this post?</div>
-        : <div>Are you sure you want to delete this comment?</div>
+          ? <div>Are you sure you want to delete this post?</div>
+          :
+          isCategory
+            ? <div>Are you sure you want to delete this category?</div>
+            : <div>Are you sure you want to delete this comment?</div>
       }
-      
+
       <div>
         <button
           onClick={
@@ -25,7 +30,23 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
                     () => {
                       history.push("/")
                     })
-              } else {
+              }
+              else if (isCategory) {
+                console.log(categoryId)
+                deleteCategory(categoryId)
+                  .then(
+                    () => {
+                      getCategories()
+                    }
+                  )
+                  .then(
+                    () => {
+                      const buttonTarget = document.querySelector(`#anything-${categoryId}`)
+                      buttonTarget.close()
+                    }
+                  )
+              }
+              else {
                 deleteComment(commentId)
                   .then(
                     () => {
@@ -34,7 +55,7 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
                   )
                   .then(
                     () => {
-                      const buttonTarget = document.querySelector(`#anything-${isPost}`)
+                      const buttonTarget = document.querySelector(`#anything-${commentId}`)
                       buttonTarget.close()
                     }
                   )
@@ -46,7 +67,7 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
           onClick={
             (e) => {
               e.preventDefault()
-              const buttonTarget = document.querySelector(`#anything-${isPost}`)
+              const buttonTarget = document.querySelector(`#anything-${postId}`)
               buttonTarget.close()
             }
           }
@@ -55,20 +76,35 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
       </div>
 
     </dialog>
-    <button onClick={() => {
-      if(isPost) {
+    <button
+    className="category_edit"
+    onClick={() => {
+      if (isPost) {
         history.push(`/editPost/${postId}`)
+      } else if (isCategory) {
+        history.push(`/editCategory/${categoryId}`)
       } else {
         window.alert("Cannot edit comments")
       }
     }}>
-      <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
+      {isCategory ?
+        <div>Edit</div>
+        :
+        <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
+      }
     </button>
-    <button onClick={() => {
-      const buttonTarget = document.querySelector(`#anything-${isPost}`)
+    <button
+    className="category_delete"
+    onClick={() => {
+      console.log(categoryId)
+      const buttonTarget = document.querySelector(`#anything-${categoryId}`)
       buttonTarget.showModal()
     }}>
-      <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />
+      {isCategory ?
+        <div>Delete</div>
+        :
+        <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />
+      }
     </button>
   </div >
 }
