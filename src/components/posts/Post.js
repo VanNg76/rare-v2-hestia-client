@@ -76,14 +76,16 @@ export const Post = ({ listView, cardView, post }) => {
                             <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
                                 <div>By <Link to={`/users/${post.userId}`} >
-                                    {post.user.username}
+                                    {post.user.user.username}
                                 </Link>
                                 </div>
+                                <div>
                                 {
                                     showComments
                                         ? <button onClick={() => { setShowComments(false) }}>Show Post</button>
                                         : <button onClick={() => setShowComments(true)}>View Comments</button>
                                 }
+                                </div>
                                 <div>Reactions</div>
                             </div>
                             {
