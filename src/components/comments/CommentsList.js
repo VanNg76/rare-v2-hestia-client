@@ -28,7 +28,7 @@ export const CommentList = ({ postId }) => {
         },
         [postId]
     )
-    /* 
+    /*
         invoke function
         getCommentsByPostId()
             then set comments from returned data
@@ -51,21 +51,21 @@ export const CommentList = ({ postId }) => {
 
 
     return <>
-    comments
+    Comments
     {/* <CommentForm postId={postId} /> */}
     <CommentForm postId={postId} getComments={getComments}/>
-    {/* 
+    {/*
         map over comments and invoke comment component
         other needed JSX tags for styling
     */}
     {
         comments.map(comment => {
-            let currentAuthor = comment.user.id === parseInt(localStorage.getItem("token"))
+            let currentAuthor = comment.is_author
             return <div key={`comment--${comment.id}`}>
                     <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
                 </div>
         })
     }
-    
+
     </>
 }
