@@ -56,6 +56,7 @@ export const getPostsByTag = (id) => {
 //     method: "POST",
 //     headers: {
 //       "Content-Type": "application/json",
+//       "Authorization": `Token ${localStorage.getItem("token")}`   
 //     },
 //     body: JSON.stringify(body),
 //   }).then((response) => response.json());
