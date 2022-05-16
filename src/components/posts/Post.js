@@ -9,7 +9,7 @@ export const Post = ({ listView, cardView, post }) => {
 
     const [showComments, setShowComments] = useState(false)
     const history = useHistory()
-    const currentUser = parseInt(localStorage.getItem("token"))
+    // const currentUser = parseInt(localStorage.getItem("token"))
 
 
     return <>
@@ -34,7 +34,7 @@ export const Post = ({ listView, cardView, post }) => {
                         <div className="cardFunctions">
                             <div>Reaction Count: 0</div>
                             {
-                                post.userId === currentUser
+                                post.is_author
                                     ? <div className="cardButtons">
                                         <ButtonControls isPost={true} postId={post.id} />
                                     </div>
@@ -50,7 +50,7 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                             {
-                                post.userId === currentUser
+                                post.is_author
                                     ? <ButtonControls isPost={true} postId={post.id} />
                                     : null
                             }
@@ -65,7 +65,7 @@ export const Post = ({ listView, cardView, post }) => {
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
                                     {
-                                        post.userId === currentUser
+                                        post.is_author
                                             ? <ButtonControls isPost={true} postId={post.id} />
                                             : null
                                     }
