@@ -49,17 +49,18 @@ export const getPostsByTag = (id) => {
 //   .then(response => response.json())
 // }
 
-create post
-export const createPost = (body) => {
-  return fetch(`http://localhost:8088/posts`, {
+// create post
+// export const createPost = (body) => {
+//   return fetch(`http://localhost:8088/posts`, {
 
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  }).then((response) => response.json());
-};
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Authorization": `Token ${localStorage.getItem("token")}`   
+//     },
+//     body: JSON.stringify(body),
+//   }).then((response) => response.json());
+// };
 
 export const searchPostTitles = titleString => {
   return fetchIt(`http://localhost:8088/posts?title=${titleString}`)
