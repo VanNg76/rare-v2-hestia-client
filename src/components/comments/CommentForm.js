@@ -11,17 +11,17 @@ export const CommentForm = ({ postId, getComments }) => {
         // post id
         // author of comment id (current user)
         // content
-    
+
     // function to handle comment submission
     const submitComment = () => {
         if(newComment.length > 0) {
 
             const copy = {}
+            copy.created_on = (new Date()).toISOString().split('T')[0]
             copy.content = newComment
             // gets comment content from state
             // adds postId
-            copy.postId = postId
-            copy.authorId = parseInt(localStorage.getItem("token"))
+            copy.post = postId
             // adds current user id
             // sends to database using function from CommentManager
             addComment(copy)
@@ -33,7 +33,7 @@ export const CommentForm = ({ postId, getComments }) => {
         }
     }
     return <>
-        {/* 
+        {/*
             textarea form input
             button to submit comment
         */}
