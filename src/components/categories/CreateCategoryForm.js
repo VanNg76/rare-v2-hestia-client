@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { createCategory, getSingleCategory, updateCategory } from "./CategoryManager";
+import "./Categories.css"
 
 // def a function that will return a new category form
 
@@ -32,14 +33,14 @@ export const NewCategoryForm = ({ getCategories, editing }) => {
                 label: form.label
             }
             updateCategory(updatedCategory)
-            .then(
-                () => {
-                    history.push("/categories")
-                })
+                .then(
+                    () => {
+                        history.push("/categories")
+                    })
         }
         else {
-        createCategory(newCategory)
-            .then(getCategories)
+            createCategory(newCategory)
+                .then(getCategories)
         }
     }
 
@@ -64,14 +65,14 @@ export const NewCategoryForm = ({ getCategories, editing }) => {
             <fieldset>
                 <div className="form-group">
                     {editing ?
-                        <label htmlFor="category">Update category</label>
-                        : <label htmlFor="category">Create a new category</label>
+                        <label htmlFor="category">Update category:</label>
+                        : <label htmlFor="category">Create a new category:</label>
                     }
                     <input
                         required autoFocus
                         type="text" id="category"
-                        className="form-control"
-                        placeholder="add text"
+                        className="category-input"
+                        placeholder="Add text..."
                         value={form.label}
                         onChange={
                             (e) => {
@@ -89,6 +90,14 @@ export const NewCategoryForm = ({ getCategories, editing }) => {
                         }} className="submit-button">
                             Submit
                         </button>
+                        {editing ?
+                            <button onClick={() => {
+                                history.push("/categories")
+                            }} className="return-button">
+                                Cancel
+                            </button>
+                            : ""
+                        }
                     </div>
                 </div>
             </fieldset>
