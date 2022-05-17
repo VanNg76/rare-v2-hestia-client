@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
+import { fetchIt } from "../utils/Fetch"
 import { updateTag, getSingleTag } from "./TagManager"
 
 
-export const EditTag = (tagId) => {      
+export const EditTag = () => {      
+    const history = useHistory()
+    const id = useParams()
     
-    // const tagId = useParams()
+    const [ tag, updateTag ] = useState({})
+    const [ tagToEdit, setTagToEdit ] = useState([])
+      
+    useEffect (
+        () => {
+            getSingleTag(id)
+                .then(res => res.json())
+                .then((editTagArray) => {
+                    setTagToEdit(editTagArray)
+                })
+            },
+                [])          
     
-    // const [ tag, updateForm ] = useState({})
-    // const [ tagToEdit, setTagToEdit ] = useState([])
-            
+
+        // // object builder
+        // const editTagObject = {
+        //     label: tag.label
+        // }
+
+
+        // FN to hand the POST action for the newly built tag object
+        
     const submitTag = (e) => {
         e.preventDefault()
         const updatedTag = {
@@ -18,21 +38,8 @@ export const EditTag = (tagId) => {
         return fetchIt(`${Settings.API}/tags`, "POST", JSON.stringify(updatedTag))
         .then(getTags)
        
-    }
-
-    useEffect (
-        () => {
-            getSingleTag(tagId)
-                .then(res => res.json())
-                .then((editTagArray) => {
-                    setTagToEdit(editTagArray)
-                })
-            },
-                [])          
-                
+    }    
         
-                
-
         
         return (
             <form className="tagForm">
@@ -49,7 +56,7 @@ export const EditTag = (tagId) => {
                                     (evt) => {
                                         const copy = {...tag}
                                         copy.label = evt.target.value
-                                        updateForm(copy)
+                                        updateTag(copy)
                                     }
                                 }
                             />
@@ -59,7 +66,7 @@ export const EditTag = (tagId) => {
     
                     <button onClick={(e) => {
                             submitTag(e)
-                            updateForm({label: ""})
+                            updateTag({label: ""})
                         }} className="submit-button">
                             Save Changes
                         </button>

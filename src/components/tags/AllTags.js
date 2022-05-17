@@ -1,14 +1,14 @@
 import { getAllTags, deleteTag } from "./TagManager"
 import { EditTag } from "./EditTag"
 import React, { useEffect, useState } from "react"
-// import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { NewTagForm } from "./CreateTagForm"
 
 
 export const AllTags = () => {
 
     const [tags, setTags] = useState([])
-    // const history = useHistory()
+    const history = useHistory()
     const getTags = () => {
         return getAllTags()
                 .then((tags => {
@@ -31,9 +31,16 @@ export const AllTags = () => {
             return <div key={`tag--${tag.id}`}>{tag.label} 
             <div>
             <button type='submit'
-                onClick={evt => {
-                    EditTag(tag.id)
-                }}
+
+                    onClick={() => {
+                        history.push(`editTag/${tag.id}`)
+                    }}
+
+
+
+                // onClick={evt => {
+                //     EditTag(tag.id)
+                // }}
                 button className="btn btn-4 btn-sep icon-create">Edit</button> 
             </div>
 

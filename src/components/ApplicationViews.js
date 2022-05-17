@@ -32,7 +32,7 @@ export const ApplicationViews = () => {
       <Route path="/tags">
         <AllTags />
       <Route exact path="/editTag/:tagId(\d+)">
-         <EditTag editing={true} />
+         <EditTag />
       </Route>
       </Route>
       <Route exact path="/newPost">
