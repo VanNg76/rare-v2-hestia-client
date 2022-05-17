@@ -4,6 +4,7 @@ import { Home } from "./home/Home.js"
 import { AllPosts } from "./posts/AllPosts.js"
 import { UserList } from "./users/UserList.js"
 import { AllTags } from "./tags/AllTags.js"
+import { EditTag } from "./tags/EditTag.js"
 import { AllCategories } from "./categories/AllCategories"
 
 import { User } from "./users/User.js"
@@ -30,6 +31,9 @@ export const ApplicationViews = () => {
       </Route>
       <Route path="/tags">
         <AllTags />
+      <Route exact path="/editTag/:tagId(\d+)">
+         <EditTag editing={true} />
+      </Route>
       </Route>
       <Route exact path="/newPost">
         <CreatePosts editing={false} />
