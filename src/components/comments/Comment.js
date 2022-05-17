@@ -7,7 +7,7 @@ import { deleteComment } from "./CommentManager"
 
 
 // export single comment component
-export const Comment = ({ postId, commentObject, currentAuthor, getComments }) => {
+export const Comment = ({ postId, commentObject, currentAuthor, getComments, lastComment }) => {
     // currentAuthor should be boolean defined where Comment component is invoked
     // true if the current user is the comment's author
     // in JSX, delete comment button is then displayed
@@ -20,7 +20,13 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments }) =
         deleteComment(commentId)
             .then(() => getComments(postId))
     }
-
+    const dateFormat = (obj) => {
+        const copy = {...obj }
+        const dateArray = copy.created_on.split('-')
+        const dayArray = dateArray[2].split('T')
+        const newDate = `${dateArray[1]}-${dayArray[0]}-${dateArray[0]}`
+        return newDate
+    }
     return <div className="comment" >
         {/*
                 JSX for comment
@@ -31,7 +37,7 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments }) =
             */}
         <div>{commentObject.content}</div>
         <div>{commentObject.author.user.username}</div>
-        <div>{commentObject.created_on}</div>
+        <div>{dateFormat(commentObject)}</div>
         {
             currentAuthor
                 ? <div>
@@ -42,6 +48,11 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments }) =
                         getComments={getComments} />
                 </div>
                 : null
+        }
+        {
+            postId != lastComment ?
+             <hr></hr>
+            : ""
         }
     </div>
 }

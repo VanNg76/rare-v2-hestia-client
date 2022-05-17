@@ -6,13 +6,13 @@ import { UserList } from "./users/UserList.js"
 import { AllTags } from "./tags/AllTags.js"
 import { EditTag } from "./tags/EditTag.js"
 import { AllCategories } from "./categories/AllCategories"
-
 import { User } from "./users/User.js"
 import { CreatePosts } from "./posts/CreatePosts.js"
 import { MyPosts } from "./posts/MyPosts.js"
 import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
 import { NewCategoryForm } from "./categories/CreateCategoryForm.js"
+import { CommentForm } from "./comments/CommentForm.js"
 
 export const ApplicationViews = () => {
   return (
@@ -55,6 +55,9 @@ export const ApplicationViews = () => {
       </Route>
       <Route exact path="/editCategory/:categoryId(\d+)">
         <NewCategoryForm editing={true} />
+      </Route>
+      <Route exact path="/editComment/:commentId(\d+)">
+        <CommentForm editing={true} />
       </Route>
     </>
   )

@@ -5,3 +5,35 @@
     text-align: center;
     margin-top: 1rem;
 }
+
+.editComment-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.edit-comment {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.edit-input {
+    width: 40%;
+    padding-top: .15rem;
+    padding-left: .15rem;
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+}
+
+.input-container {
+    width: 100%;
+}
+
+.comment-input {
+    width: 100%;
+    padding-top: .15rem;
+    padding-left: .15rem;
+}
+
+
