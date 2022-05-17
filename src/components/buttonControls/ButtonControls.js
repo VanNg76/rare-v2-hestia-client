@@ -92,7 +92,7 @@ export const ButtonControls = ({ isPost, isCategory, postId, commentId, category
       } else if (isCategory) {
         history.push(`/editCategory/${categoryId}`)
       } else {
-        window.alert("Cannot edit comments")
+        history.push(`/editComment/${commentId}`)
       }
     }}>
       {isCategory ?
