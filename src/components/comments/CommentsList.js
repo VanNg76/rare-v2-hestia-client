@@ -62,8 +62,9 @@ export const CommentList = ({ postId }) => {
     {
         comments.map(comment => {
             let currentAuthor = comment.is_author
+            let lastComment = comments[-1]
             return <div key={`comment--${comment.id}`}>
-                    <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
+                    <Comment postId={comment.post.id} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} lastComment={lastComment} />
                 </div>
         })
     }
