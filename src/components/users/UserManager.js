@@ -18,3 +18,11 @@ export const getAllUsers = () => {
 export const getSingleUser = (id) => {
     return fetchIt(`${Settings.API}/users/${id}`)
 }
+
+export const deactivateUser = (user) => {
+    return fetchIt(`${Settings.API}/users/${user.id}/deactivate`, "PUT", JSON.stringify(user))
+}
+
+export const reactivateUser = (user) => {
+    return fetchIt(`${Settings.API}/users/${user.id}/reactivate`, "PUT", JSON.stringify(user))
+}

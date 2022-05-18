@@ -40,7 +40,7 @@ export const UserList = () => {
             </div>
         })
     }
-    {/* 
+    {/*
         map over users and invoke <User /> component for each
         add any other jsx tags as needed for styling
     */}

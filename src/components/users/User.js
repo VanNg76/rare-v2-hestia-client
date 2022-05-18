@@ -7,17 +7,40 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import "./User.css"
-import { getSingleUser } from "./UserManager"
+import { getSingleUser, reactivateUser, deactivateUser } from "./UserManager"
 import { Link } from "react-router-dom"
 import { SubForm } from "./SubForm"
 
 // function that generates JSX for individual user element
 export const User = ({ listView, user }) => {
-    // probably want a prop that indicates whether 
+    // probably want a prop that indicates whether
     // content is being generated in a list vs individual page
     const [viewUser, setViewUser] = useState(user)
     const [postCount, setPostCount] = useState(0)
+    const [is_active, setActive] = useState(false)
     const { userId } = useParams()
+
+    const activeSwitch = () => {
+        let currentValue = is_active
+        currentValue = !currentValue
+        setActive(currentValue)
+    }
+
+    const deactivate = () => {
+        let copy = {...user}
+        copy.active = false
+        setViewUser(copy)
+        deactivateUser(copy)
+        .then(activeSwitch)
+    }
+
+    const reactivate = () => {
+        let copy = {...user}
+        copy.active = true
+        setViewUser(copy)
+        reactivateUser(copy)
+        .then(activeSwitch)
+    }
 
     useEffect(
         () => {
@@ -46,12 +69,12 @@ export const User = ({ listView, user }) => {
     // useEffect(() => getArticlesForUser function then setArticles, [])
 
     /* useEffect(() => getSubscribedStatus)
-        this useEffect can run on page load 
+        this useEffect can run on page load
         needs to check if the viewing user is subscribed to the viewed user
         get subscribed list from database
             the database function should probably take id as param
             only returns subbed relationships of the viewing user
-        iterate over the sub list 
+        iterate over the sub list
             to check if viewed user is in the list
             if viewer is subbed to viewed setSubscribed state to true
     */
@@ -61,8 +84,28 @@ export const User = ({ listView, user }) => {
         // if not subbed - onclick calls add sub function
 
     return <>
-        {listView 
+        {listView
             ? <div className="singleUser">
+                {
+                            viewUser.active ?
+                                // TODO: create the Leave button
+                                <button className="leave_button"
+                                    onClick={() => {
+                                        deactivate()
+                                    }}
+                                >
+                                    Deactivate
+                                </button>
+                                :
+                            // TODO: create the Join button
+                                <button className="join_button"
+                                    onClick={() => {
+                                        reactivate()
+                                    }}
+                                >
+                                    Reactivate
+                                </button>
+                        }
                 <div>
                     <Link to={`/users/${user.id}`}>
                     {user.user.username}
@@ -71,7 +114,7 @@ export const User = ({ listView, user }) => {
                 <div>{user.user.first_name}</div>
                 <div>{user.user.last_name}</div>
                 <div>{user.user.email}</div>
-            </div> 
+            </div>
             : viewUser
                 ? <div>
                     <div>Picture: <img src={`${viewUser.user?.profileImageUrl || "https://m.media-amazon.com/images/I/91xDQaUMubS._AC_SL1500_.jpg"}`} width={300} height={300} /></div>
@@ -91,7 +134,7 @@ export const User = ({ listView, user }) => {
                 </div>
                 : null
         }
-    {/* 
+    {/*
         JSX for the individual user
             in list form - just need name and link to individual page
 
@@ -105,6 +148,6 @@ export const User = ({ listView, user }) => {
                 - clickable article count
                 - subscribe button - displays as either subscribe or unsubscribe
     */}
-    
+
     </>
 }
