@@ -17,8 +17,8 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
     // probably want a prop that indicates whether
     // content is being generated in a list vs individual page
     const [viewUser, setViewUser] = useState(user)
-    const [postCount, setPostCount] = useState(0)
     const [is_admin, setAdmin] = useState(false)
+    // const [postCount, setPostCount] = useState(0)
     const { userId } = useParams()
 
     const deactivate = () => {
@@ -48,15 +48,6 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
 
     useEffect(
         () => {
-            if (viewUser) {
-                let count = viewUser.posts?.length
-                setPostCount(count)
-            }
-        }, [viewUser]
-    )
-
-    useEffect(
-        () => {
             if (listView) {
                 if (currentUser?.user.is_staff === true) {
                     setAdmin(true)
@@ -64,6 +55,16 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
             }
         }, [listView, currentUser]
     )
+
+    // useEffect(
+    //     () => {
+    //         if (viewUser) {
+    //             let count = viewUser.posts?.length
+    //             setPostCount(count)
+    //         }
+    //     }, [viewUser]
+    // )
+
     // define state variables
     // maybe get user's articles for the clickable article count?
     // articles, setArticles = useState()
@@ -125,7 +126,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                     <div>Profile Type: Author</div>
                     <div>
                         <Link to={`/posts/user/${viewUser.id}`}>
-                            See Articles - Count: {postCount}
+                        See Articles - Count: {viewUser.postCount}
                         </Link>
                     </div>
                     <div>
