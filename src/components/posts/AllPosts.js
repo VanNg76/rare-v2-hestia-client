@@ -51,7 +51,7 @@ export const AllPosts = () => {
             searchPostTitles(filter.value)
                 .then(setPosts)
         } else if (filter.type === "category") {
-           searchPostCategories(filter.value)
+           searchPostCategories(parseInt(filter.value))
                 .then(setPosts)
         } 
           // run category filter fetch with value
