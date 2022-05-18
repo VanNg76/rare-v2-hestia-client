@@ -13,27 +13,20 @@ import { SubForm } from "./SubForm"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 
 // function that generates JSX for individual user element
-export const User = ({ listView, user }) => {
+export const User = ({ listView, user, currentUser, getUsers }) => {
     // probably want a prop that indicates whether
     // content is being generated in a list vs individual page
     const [viewUser, setViewUser] = useState(user)
     const [postCount, setPostCount] = useState(0)
-    const [is_active, setActive] = useState(false)
     const [is_admin, setAdmin] = useState(false)
     const { userId } = useParams()
-
-    const activeSwitch = () => {
-        let currentValue = is_active
-        currentValue = !currentValue
-        setActive(currentValue)
-    }
 
     const deactivate = () => {
         let copy = { ...user }
         copy.active = false
         setViewUser(copy)
         deactivateUser(copy)
-            .then(activeSwitch)
+            .then(() => getUsers())
     }
 
     const reactivate = () => {
@@ -41,7 +34,7 @@ export const User = ({ listView, user }) => {
         copy.active = true
         setViewUser(copy)
         reactivateUser(copy)
-            .then(activeSwitch)
+            .then(() => getUsers())
     }
 
     useEffect(
@@ -64,10 +57,12 @@ export const User = ({ listView, user }) => {
 
     useEffect(
         () => {
-            if (user.user.is_staff === true) {
-                setAdmin(true)
+            if (listView) {
+                if (currentUser?.user.is_staff === true) {
+                    setAdmin(true)
+                }
             }
-        }, []
+        }, [listView, currentUser]
     )
     // define state variables
     // maybe get user's articles for the clickable article count?

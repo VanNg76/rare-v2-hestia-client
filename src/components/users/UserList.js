@@ -3,7 +3,7 @@
 // get all users fetch
 import { useEffect, useState } from "react"
 import { User } from "./User"
-import { getAllUsers } from "./UserManager"
+import { getAllUsers, getCurrentUser } from "./UserManager"
 
 // function that generates list of users
 // invokes User function from User.js for each user
@@ -11,14 +11,23 @@ export const UserList = () => {
     // define needed state variables
     // users, setUsers = useState()
     const [users, setUsers] = useState([])
+    const [currentUser, setCurrentUser] = useState()
+
+    const getUsers = () => {
+        getAllUsers()
+            .then(setUsers)
+    }
 
     // define needed useEffects
     // useEffect(() => getUsers function and set as users state variable, [])
     useEffect(() => {
-        getAllUsers()
-            .then(userData => {
-                setUsers(userData)
-            })
+        getUsers()
+    }, [])
+
+    useEffect(
+        () => {
+        getCurrentUser()
+        .then(setCurrentUser)
     }, [])
     // define needed functions
     // will the users have any buttons?
@@ -36,7 +45,7 @@ export const UserList = () => {
     {
         users?.map(user => {
             return <div key={`user-${user.id}`}>
-                <User user={user} listView={true} />
+                <User user={user} listView={true} currentUser={currentUser} getUsers={getUsers} />
             </div>
         })
     }

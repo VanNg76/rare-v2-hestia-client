@@ -5,7 +5,7 @@ import { deleteCategory } from "../categories/CategoryManager"
 import { useHistory } from "react-router-dom"
 import "./ButtonControls.css"
 
-export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, commentId, categoryId, user, getComments, getCategories, deactivate, reactivate }) => {
+export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, commentId, categoryId, user, removeComment, getCategories, deactivate, reactivate }) => {
   const history = useHistory()
 
   return <div>
@@ -52,25 +52,20 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
                   )
               }
               else if (isComment) {
-                deleteComment(commentId)
-                  .then(
-                    () => {
-                      getComments(postId)
-                    }
-                  )
-                  .then(
-                    () => {
+                removeComment(commentId)
                       const buttonTarget = document.querySelector(`#anything-${commentId}`)
                       buttonTarget.close()
-                    }
-                  )
               }
               else {
                 if (user.active) {
                   deactivate()
+                        const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                        buttonTarget.close()
                 }
                 else {
                   reactivate()
+                        const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                        buttonTarget.close()
                 }
               }
             }
@@ -112,11 +107,12 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
             history.push(`/editComment/${commentId}`)
           }
         }}>
-        {isCategory ?
-          <div>Edit</div>
-          :
-          <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
-        }
+        {!isUser ?
+          isCategory ?
+            <div>Edit</div>
+            :
+            <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
+          : ""}
       </button>
       : ""
     }
@@ -136,11 +132,12 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
             buttonTarget.showModal()
           }
         }}>
-        {isCategory ?
-          <div>Delete</div>
-          :
-          <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />
-        }
+        {!isUser ?
+          isCategory ?
+            <div>Delete</div>
+            :
+            <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />
+          : ""}
       </button>
       : ""
     }

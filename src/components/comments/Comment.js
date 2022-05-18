@@ -20,6 +20,7 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments, las
         deleteComment(commentId)
             .then(() => getComments(postId))
     }
+
     const dateFormat = (obj) => {
         const copy = {...obj }
         const dateArray = copy.created_on.split('-')
@@ -27,6 +28,7 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments, las
         const newDate = `${dateArray[1]}-${dayArray[0]}-${dateArray[0]}`
         return newDate
     }
+
     return <div className="comment" >
         {/*
                 JSX for comment
@@ -44,9 +46,10 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments, las
                     <ButtonControls
                         isPost={false}
                         isComment={true}
+                        isUser={false}
                         postId={postId}
                         commentId={commentObject.id}
-                        getComments={getComments} />
+                        removeComment={removeComment} />
                 </div>
                 : null
         }
