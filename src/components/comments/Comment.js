@@ -43,6 +43,7 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments, las
                 ? <div>
                     <ButtonControls
                         isPost={false}
+                        isComment={true}
                         postId={postId}
                         commentId={commentObject.id}
                         getComments={getComments} />

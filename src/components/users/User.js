@@ -10,6 +10,7 @@ import "./User.css"
 import { getSingleUser, reactivateUser, deactivateUser } from "./UserManager"
 import { Link } from "react-router-dom"
 import { SubForm } from "./SubForm"
+import { ButtonControls } from "../buttonControls/ButtonControls"
 
 // function that generates JSX for individual user element
 export const User = ({ listView, user }) => {
@@ -18,6 +19,7 @@ export const User = ({ listView, user }) => {
     const [viewUser, setViewUser] = useState(user)
     const [postCount, setPostCount] = useState(0)
     const [is_active, setActive] = useState(false)
+    const [is_admin, setAdmin] = useState(false)
     const { userId } = useParams()
 
     const activeSwitch = () => {
@@ -27,24 +29,24 @@ export const User = ({ listView, user }) => {
     }
 
     const deactivate = () => {
-        let copy = {...user}
+        let copy = { ...user }
         copy.active = false
         setViewUser(copy)
         deactivateUser(copy)
-        .then(activeSwitch)
+            .then(activeSwitch)
     }
 
     const reactivate = () => {
-        let copy = {...user}
+        let copy = { ...user }
         copy.active = true
         setViewUser(copy)
         reactivateUser(copy)
-        .then(activeSwitch)
+            .then(activeSwitch)
     }
 
     useEffect(
         () => {
-            if(!listView) {
+            if (!listView) {
                 getSingleUser(userId)
                     .then(userData => setViewUser(userData))
             }
@@ -53,16 +55,24 @@ export const User = ({ listView, user }) => {
 
     useEffect(
         () => {
-            if(viewUser) {
+            if (viewUser) {
                 let count = viewUser.posts?.length
                 setPostCount(count)
             }
         }, [viewUser]
     )
-        // define state variables
-        // maybe get user's articles for the clickable article count?
-        // articles, setArticles = useState()
-        // subscribed, setSubscribed = useState(false) // default could be false
+
+    useEffect(
+        () => {
+            if (user.user.is_staff === true) {
+                setAdmin(true)
+            }
+        }, []
+    )
+    // define state variables
+    // maybe get user's articles for the clickable article count?
+    // articles, setArticles = useState()
+    // subscribed, setSubscribed = useState(false) // default could be false
 
     // define useEffects
     // only needed for list view
@@ -79,42 +89,37 @@ export const User = ({ listView, user }) => {
             if viewer is subbed to viewed setSubscribed state to true
     */
     // does subscribe button need an onclick?
-        // yes
-        // if subbed - onclick calls delete sub function
-        // if not subbed - onclick calls add sub function
+    // yes
+    // if subbed - onclick calls delete sub function
+    // if not subbed - onclick calls add sub function
 
     return <>
         {listView
-            ? <div className="singleUser">
-                {
-                            viewUser.active ?
-                                // TODO: create the Leave button
-                                <button className="leave_button"
-                                    onClick={() => {
-                                        deactivate()
-                                    }}
-                                >
-                                    Deactivate
-                                </button>
-                                :
-                            // TODO: create the Join button
-                                <button className="join_button"
-                                    onClick={() => {
-                                        reactivate()
-                                    }}
-                                >
-                                    Reactivate
-                                </button>
-                        }
+            ?
+            <div className="singleUser">
+                {is_admin ?
+                    <div>
+                        <ButtonControls
+                            isPost={false}
+                            isComment={false}
+                            isUser={true}
+                            user={user}
+                            deactivate={deactivate}
+                            reactivate={reactivate}
+                        />
+                    </div>
+                    : ""
+                }
                 <div>
                     <Link to={`/users/${user.id}`}>
-                    {user.user.username}
+                        {user.user.username}
                     </Link>
                 </div>
                 <div>{user.user.first_name}</div>
                 <div>{user.user.last_name}</div>
                 <div>{user.user.email}</div>
             </div>
+
             : viewUser
                 ? <div>
                     <div>Picture: <img src={`${viewUser.user?.profileImageUrl || "https://m.media-amazon.com/images/I/91xDQaUMubS._AC_SL1500_.jpg"}`} width={300} height={300} /></div>
@@ -125,7 +130,7 @@ export const User = ({ listView, user }) => {
                     <div>Profile Type: Author</div>
                     <div>
                         <Link to={`/posts/user/${viewUser.id}`}>
-                        See Articles - Count: {postCount}
+                            See Articles - Count: {postCount}
                         </Link>
                     </div>
                     <div>
@@ -134,7 +139,7 @@ export const User = ({ listView, user }) => {
                 </div>
                 : null
         }
-    {/*
+        {/*
         JSX for the individual user
             in list form - just need name and link to individual page
 
