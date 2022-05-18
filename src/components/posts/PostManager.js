@@ -6,6 +6,10 @@ export const getAllPosts = () => {
   return fetchIt(`${Settings.API}/posts`)
 }
 
+export const getAllApprovedPosts = () => {
+  return fetchIt(`${Settings.API}/posts?approved=True`)
+}
+
 // export function that fetches single post, needs param to take id as arg, then parse from json to js
 
 export const getSinglePost = (id) => {
@@ -60,7 +64,7 @@ export const getPostsByTag = (id) => {
 //     method: "POST",
 //     headers: {
 //       "Content-Type": "application/json",
-//       "Authorization": `Token ${localStorage.getItem("token")}`   
+//       "Authorization": `Token ${localStorage.getItem("token")}`
 //     },
 //     body: JSON.stringify(body),
 //   }).then((response) => response.json());

@@ -36,7 +36,7 @@
 
 .postDetails {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .postDetailsTags {
@@ -47,6 +47,8 @@
 .postDetailsMain {
     display: flex;
     flex-direction: column;
+    width: 60%;
+    margin-right: 10rem;
 }
 
 .postDetailsTitle {
@@ -54,6 +56,23 @@
     justify-content: space-between;
 }
 
+.image-container {
+    height: 50%;
+    margin-bottom: .5rem;
+}
+
+.post-image {
+    width: 100%;
+    height: 100%;
+}
+
+.approval {
+    font-size: 20px;
+    font-weight: 500;
+}
+
 .postDetailsBelowCard {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
 }

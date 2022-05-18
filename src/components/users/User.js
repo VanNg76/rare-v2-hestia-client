@@ -113,7 +113,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                 </div>
                 <div>{user.user.first_name}</div>
                 <div>{user.user.last_name}</div>
-                <div>{user.user.email}</div>
+                <div>{user.user.is_staff ? "Admin" : "Author"}</div>
             </div>
 
             : viewUser
@@ -123,7 +123,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                     <div>Username: {viewUser.user.username}</div>
                     <div>Email: {viewUser.user.email}</div>
                     <div>Creation Date: {viewUser.user.date_joined}</div>
-                    <div>Profile Type: Author</div>
+                    <div>Profile Type: {viewUser.user.is_staff ? "Admin" : "Author"}</div>
                     <div>
                         <Link to={`/posts/user/${viewUser.id}`}>
                         See Articles - Count: {viewUser.postCount}
