@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react"
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { fetchIt } from "../utils/Fetch"
 import { updateTag, getSingleTag } from "./TagManager"
+import { AllTags } from "./AllTags"
 
 
 export const EditTag = () => {      
-    const history = useHistory()
-    const id = useParams()
+    const tagId = useParams()
     
     const [ tag, updateTag ] = useState({})
-    const [ tagToEdit, setTagToEdit ] = useState([])
+    const [ tagToEdit, setTagToEdit ] = useState({})
       
     useEffect (
         () => {
-            getSingleTag(id)
+            getSingleTag(tagId)
                 .then(res => res.json())
                 .then((editTagArray) => {
                     setTagToEdit(editTagArray)
@@ -21,22 +21,16 @@ export const EditTag = () => {
             },
                 [])          
     
-
-        // // object builder
-        // const editTagObject = {
-        //     label: tag.label
-        // }
-
-
-        // FN to hand the POST action for the newly built tag object
+        // FN to handle POST action for newly built tag object
         
-    const submitTag = (e) => {
-        e.preventDefault()
+    const submitTag = (evt) => {
+        evt.preventDefault()
         const updatedTag = {
-            label: form.label
+            id: tagToEdit.id,
+            label: tag.label
         }
-        return fetchIt(`${Settings.API}/tags`, "POST", JSON.stringify(updatedTag))
-        .then(getTags)
+        updateTag(updatedTag)
+        .then(AllTags)
        
     }    
         
@@ -47,7 +41,7 @@ export const EditTag = () => {
                     <fieldset>
                         <div className="form-group" key={`tag--${tag.id}`}>{tag.label}
                         
-                            <label htmlFor="label">label: </label>
+                            <label htmlFor="label">New Tag: </label>
                             <input type="text" name="label" 
                                     required autoFocus className="form-control" 
                                     placeholder={tagToEdit.label}
@@ -64,8 +58,9 @@ export const EditTag = () => {
                     </fieldset>
     
     
-                    <button onClick={(e) => {
-                            submitTag(e)
+                    <button onClick={(evt) => {
+                            submitTag()
+                            updateTag(evt)
                             updateTag({label: ""})
                         }} className="submit-button">
                             Save Changes

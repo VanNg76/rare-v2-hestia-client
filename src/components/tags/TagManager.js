@@ -10,9 +10,8 @@ export const getAllTags = () => {
   return fetchIt(`${API}/tags`)
 }
 
-
-export const updateTag = (newTag) => {
-  return fetchIt(`${Settings.API}/tags/${newTag.id}`, "PUT", JSON.stringify(newTag))
+export const updateTag = (updatedTag) => {
+  return fetchIt(`${Settings.API}/tags/${updatedTag.id}`, "PUT", JSON.stringify(updatedTag))
 }
 
 export const deleteTag = (tagId) => {
@@ -20,7 +19,5 @@ export const deleteTag = (tagId) => {
 }
 
 export const getSingleTag = (tagId) => {
-  return fetchIt(`${Settings.API}/tags/${tagId}`)
+  return fetchIt(`${Settings.API}/tags/${tagId}`)  
 }
-
-

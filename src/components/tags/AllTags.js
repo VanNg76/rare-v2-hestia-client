@@ -21,6 +21,7 @@ export const AllTags = () => {
     },
         [])
 
+    
 
     return <>
         <div>All Tags Page</div>
@@ -32,22 +33,19 @@ export const AllTags = () => {
             <div>
             <button type='submit'
 
-                    onClick={() => {
-                        history.push(`editTag/${tag.id}`)
+                    onClick={() => {                        
+                        history.push(`./tags/${tag.id}`)
+                        {EditTag(tag.id)}
                     }}
 
-
-
-                // onClick={evt => {
-                //     EditTag(tag.id)
-                // }}
                 button className="btn btn-4 btn-sep icon-create">Edit</button> 
             </div>
 
             <div>
             <button type='submit'
                 onClick={evt => {
-                    deleteTag(tag.id)
+                    const tagId = tag.id
+                    deleteTag(tagId)
                     .then(getTags)
                 }}
                 button className="btn btn-4 btn-sep icon-create">Delete</button>
