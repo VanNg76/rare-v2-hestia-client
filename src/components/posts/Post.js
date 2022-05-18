@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
+
 import "./Post.css"
 // function that renders a single post
 export const Post = ({ listView, cardView, post }) => {
@@ -11,6 +12,13 @@ export const Post = ({ listView, cardView, post }) => {
     const history = useHistory()
     // const currentUser = parseInt(localStorage.getItem("token"))
 
+    const dateFormat = (obj) => {
+        const copy = {...obj }
+        const dateArray = copy.publication_date.split('-')
+        const dayArray = dateArray[2].split('T')
+        const newDate = `${dateArray[1]}-${dayArray[0]}-${dateArray[0]}`
+        return newDate
+    }
 
     return <>
         {/* Content needed in all posts list */}
@@ -24,7 +32,7 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                         </div>
-                        <div>{post.publication_date}</div>
+                        <div>{dateFormat(post)}</div>
                     </div>
                     <div className="cardImage">
                         <img src={`${post.imageURL || "https://picsum.photos/300/100"}`} />
@@ -56,7 +64,7 @@ export const Post = ({ listView, cardView, post }) => {
                             }
                         </div>
                         <div>{post.user.user.first_name} {post.user.user.last_name}</div>
-                        <div>{post.publication_date}</div>
+                        <div>{dateFormat(post)}</div>
                         <div>{post.category.label}</div>
                         <div>{post.tags?.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
                     </div>

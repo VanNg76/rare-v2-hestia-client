@@ -1,3 +1,17 @@
 .category_delete {
     margin-left: .5rem;
 }
+
+.reactivate {
+    width: 100%;
+    color: white;
+    background-color: red;
+    font-size: 18px;
+}
+
+.deactivate {
+    width: 100%;
+    color: white;
+    background-color: green;
+    font-size: 18px;
+}
