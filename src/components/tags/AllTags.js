@@ -23,6 +23,13 @@ export const AllTags = () => {
 
     
 
+        const editTheTag = (id) => {
+
+            history.push(`/tags/${id}`)
+            EditTag()
+        }
+
+
     return <>
         <div>All Tags Page</div>
         <div className="CreateNewTagFormContainer">
@@ -34,8 +41,7 @@ export const AllTags = () => {
             <button type='submit'
 
                     onClick={() => {                        
-                        history.push(`./tags/${tag.id}`)
-                        {EditTag(tag.id)}
+                            editTheTag(tag.id)
                     }}
 
                 button className="btn btn-4 btn-sep icon-create">Edit</button> 

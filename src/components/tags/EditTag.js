@@ -4,7 +4,7 @@ import { fetchIt } from "../utils/Fetch"
 import { updateTag, getSingleTag } from "./TagManager"
 import { AllTags } from "./AllTags"
 
-
+    
 export const EditTag = () => {      
     const tagId = useParams()
     
@@ -26,7 +26,7 @@ export const EditTag = () => {
     const submitTag = (evt) => {
         evt.preventDefault()
         const updatedTag = {
-            id: tagToEdit.id,
+            // id: tag.id,
             label: tag.label
         }
         updateTag(updatedTag)
