@@ -5,18 +5,23 @@ import { deleteCategory } from "../categories/CategoryManager"
 import { useHistory } from "react-router-dom"
 import "./ButtonControls.css"
 
-export const ButtonControls = ({ isPost, isCategory, postId, commentId, categoryId, getComments, getCategories }) => {
+export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, commentId, categoryId, user, removeComment, getCategories, deactivate, reactivate }) => {
   const history = useHistory()
 
   return <div>
-    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : `anything-${commentId}`}>
+    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : isComment ? `anything-${commentId}` : `anything-${user.id}`}>
       {
         isPost
           ? <div>Are you sure you want to delete this post?</div>
           :
           isCategory
             ? <div>Are you sure you want to delete this category?</div>
-            : <div>Are you sure you want to delete this comment?</div>
+            :
+            isComment
+              ? <div>Are you sure you want to delete this comment?</div>
+              : user.active
+                ? <div>Are you sure you want to deactivate this user?</div>
+                : <div>Are you sure you want to reactivate this user?</div>
       }
 
       <div>
@@ -46,19 +51,22 @@ export const ButtonControls = ({ isPost, isCategory, postId, commentId, category
                     }
                   )
               }
-              else {
-                deleteComment(commentId)
-                  .then(
-                    () => {
-                      getComments(postId)
-                    }
-                  )
-                  .then(
-                    () => {
+              else if (isComment) {
+                removeComment(commentId)
                       const buttonTarget = document.querySelector(`#anything-${commentId}`)
                       buttonTarget.close()
-                    }
-                  )
+              }
+              else {
+                if (user.active) {
+                  deactivate()
+                        const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                        buttonTarget.close()
+                }
+                else {
+                  reactivate()
+                        const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                        buttonTarget.close()
+                }
               }
             }
           }
@@ -70,13 +78,16 @@ export const ButtonControls = ({ isPost, isCategory, postId, commentId, category
               if (isPost) {
                 const buttonTarget = document.querySelector(`#anything-${postId}`)
                 buttonTarget.close()
-                } else if (isCategory) {
+              } else if (isCategory) {
                 const buttonTarget = document.querySelector(`#anything-${categoryId}`)
                 buttonTarget.close()
-                } else {
-                 const buttonTarget = document.querySelector(`#anything-${commentId}`)
-                 buttonTarget.close()
-                }
+              } else if (isComment) {
+                const buttonTarget = document.querySelector(`#anything-${commentId}`)
+                buttonTarget.close()
+              } else {
+                const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                buttonTarget.close()
+              }
             }
           }
         >Cancel
@@ -84,44 +95,73 @@ export const ButtonControls = ({ isPost, isCategory, postId, commentId, category
       </div>
 
     </dialog>
-    <button
-    className="category_edit"
-    onClick={() => {
-      if (isPost) {
-        history.push(`/editPost/${postId}`)
-      } else if (isCategory) {
-        history.push(`/editCategory/${categoryId}`)
-      } else {
-        history.push(`/editComment/${commentId}`)
-      }
-    }}>
-      {isCategory ?
-        <div>Edit</div>
+    {!isUser ?
+      <button
+        className="category_edit"
+        onClick={() => {
+          if (isPost) {
+            history.push(`/editPost/${postId}`)
+          } else if (isCategory) {
+            history.push(`/editCategory/${categoryId}`)
+          } else if (isComment) {
+            history.push(`/editComment/${commentId}`)
+          }
+        }}>
+        {!isUser ?
+          isCategory ?
+            <div>Edit</div>
+            :
+            <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
+          : ""}
+      </button>
+      : ""
+    }
+    {!isUser ?
+      <button
+        className="category_delete"
+        onClick={() => {
+          console.log(categoryId)
+          if (isPost) {
+            const buttonTarget = document.querySelector(`#anything-${postId}`)
+            buttonTarget.showModal()
+          } else if (isCategory) {
+            const buttonTarget = document.querySelector(`#anything-${categoryId}`)
+            buttonTarget.showModal()
+          } else if (isComment) {
+            const buttonTarget = document.querySelector(`#anything-${commentId}`)
+            buttonTarget.showModal()
+          }
+        }}>
+        {!isUser ?
+          isCategory ?
+            <div>Delete</div>
+            :
+            <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />
+          : ""}
+      </button>
+      : ""
+    }
+    {isUser ?
+      user.active ?
+        <button
+          className="deactivate"
+          onClick={() => {
+            const buttonTarget = document.querySelector(`#anything-${user.id}`)
+            buttonTarget.showModal()
+          }}>
+          Deactivate
+        </button>
         :
-        <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
-      }
-    </button>
-    <button
-    className="category_delete"
-    onClick={() => {
-      console.log(categoryId)
-      if (isPost) {
-      const buttonTarget = document.querySelector(`#anything-${postId}`)
-      buttonTarget.showModal()
-      } else if (isCategory) {
-      const buttonTarget = document.querySelector(`#anything-${categoryId}`)
-      buttonTarget.showModal()
-      } else {
-       const buttonTarget = document.querySelector(`#anything-${commentId}`)
-       buttonTarget.showModal()
-      }
-    }}>
-      {isCategory ?
-        <div>Delete</div>
-        :
-        <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />
-      }
-    </button>
+        <button
+          className="reactivate"
+          onClick={() => {
+            const buttonTarget = document.querySelector(`#anything-${user.id}`)
+            buttonTarget.showModal()
+          }}>
+          Reactivate
+        </button>
+      : ""
+    }
   </div >
 }
 
