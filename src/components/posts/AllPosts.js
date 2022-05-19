@@ -1,8 +1,8 @@
-import { getAllApprovedPosts, searchPostCategories, searchPostTitles, getPostsByTag } from "./PostManager"
+import { getAllApprovedPosts, searchPostCategories, searchPostTitles, getPostsByTag, getAllPosts } from "./PostManager"
 import { getUserPosts } from "./PostManager"
 import React, { useEffect, useState } from "react";
 import { Post } from "./Post";
-import { getAllUsers } from "../users/UserManager"
+import { getAllUsers, getCurrentUser } from "../users/UserManager"
 import { getAllTags } from "../tags/TagManager";
 import { getAllCategories } from "../categories/CategoryManager";
 
@@ -13,6 +13,8 @@ export const AllPosts = () => {
     const [users, setUsers] = useState([])
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([])
+    const [currentUser, setCurrentUser] = useState()
+    const [is_admin, setAdmin] = useState(false)
     const [filter, setFilterType] = useState({ type: "all", value: "" })
 
 
@@ -40,22 +42,46 @@ export const AllPosts = () => {
         []
     )
 
+    useEffect(
+        () => {
+            getCurrentUser()
+                .then(user => {
+                    setCurrentUser(user)
+                    if (user.user.is_staff === true) {
+                        setAdmin(true)
+                    }
+                })
+        },
+        []
+    )
 
-    useEffect(() => {
-        if (filter.type === "all") {
+    const getPostsList = () => {
+        if (is_admin) {
+            getAllPosts()
+                .then((posts) => {
+                    setPosts(posts)
+                })
+        }
+        else {
             getAllApprovedPosts()
                 .then((posts) => {
                     setPosts(posts)
                 })
+        }
+    }
+
+    useEffect(() => {
+        if (filter.type === "all") {
+            getPostsList()
         } else if (filter.type === "title") {
             searchPostTitles(filter.value)
                 .then(setPosts)
         } else if (filter.type === "category") {
-           searchPostCategories(parseInt(filter.value))
+            searchPostCategories(parseInt(filter.value))
                 .then(setPosts)
         }
-          // run category filter fetch with value
-          else if (filter.type === "user") {
+        // run category filter fetch with value
+        else if (filter.type === "user") {
             getUserPosts(filter.value)
                 .then(setPosts)
             // run user filter fetch with value
@@ -64,7 +90,7 @@ export const AllPosts = () => {
                 .then(setPosts)
             // run tag filter fetch with value
         }
-    }, [filter])
+    }, [filter, is_admin])
 
     // useEffect that updates posts, [searchButton]
     return <>
@@ -97,7 +123,7 @@ export const AllPosts = () => {
                 value={filter.type === "category" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    if(e.target.value != "0") {
+                    if (e.target.value != "0") {
                         let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "category"
                         copy.value = e.target.value
@@ -127,7 +153,7 @@ export const AllPosts = () => {
                 value={filter.type === "user" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    if(e.target.value != "0") {
+                    if (e.target.value != "0") {
                         let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "user"
                         copy.value = e.target.value
@@ -185,7 +211,7 @@ export const AllPosts = () => {
             posts.length > 0
                 ? posts.map((post) => {
                     return <div key={post.id} className="posts">
-                        <Post listView={true} cardView={false} post={post} />
+                        <Post listView={true} cardView={false} post={post} currentUser={currentUser} getPostsList={getPostsList} />
                     </div>
                     // needs author name and category, publication date, content
                 })

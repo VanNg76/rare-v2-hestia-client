@@ -24,7 +24,9 @@ export const getSinglePost = (id) => {
 
 // body will have stringified json with (post) as arg
 // then getAllPosts
-
+export const addPost = (newPost) => {
+  return fetchIt(`${Settings.API}/posts`, "POST", JSON.stringify(newPost))
+}
 
 // export function that deletes a single post "postId => {"
 // return a fetch with /${postId},
@@ -38,6 +40,9 @@ export const deletePost = (id) => {
 // method: PUT
 // normal headers
 // body is stringified json with entry passed as arg
+export const updatePost = (newPost) => {
+  return fetchIt(`${Settings.API}/posts/${newPost.id}`, "PUT", JSON.stringify(newPost))
+}
 
 // get posts by user id
 export const getUserPosts = (id) => {
