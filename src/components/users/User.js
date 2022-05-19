@@ -113,7 +113,20 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                 </div>
                 <div>{user.user.first_name}</div>
                 <div>{user.user.last_name}</div>
-                <div>{user.user.is_staff ? "Admin" : "Author"}</div>
+                <div>{user.is_admin ? "Admin" : "Author"}</div>
+                {is_admin ?
+                    <div>
+                        <ButtonControls
+                            isPost={false}
+                            isComment={false}
+                            isUser={true}
+                            user={user}
+                            deactivate={deactivate}
+                            reactivate={reactivate}
+                        />
+                    </div>
+                    : ""
+                }
             </div>
 
             : viewUser
