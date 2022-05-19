@@ -6,6 +6,7 @@ import { Settings } from "../utils/Settings"
 import { getAllTags } from "../tags/TagManager";
 import { getAllPosts, getSinglePost } from "./PostManager";
 import { getAllCategories } from "../categories/CategoryManager";
+import { getCurrentUser } from "../users/UserManager";
 import { useParams } from "react-router-dom";
 
 
@@ -14,24 +15,38 @@ export const CreatePosts = ({ getPosts, editing }) => {
     const [form, updateForm] = useState({ label: "" })
     const [categories, setCategories] = useState([])
     const [tags, setTags] = useState([])
+    const [approved, setApproved] = useState(0)
     const { postId } = useParams()
     const history = useHistory()
 
-    useEffect(() => {
-        getAllCategories()
-            .then((categories) => {
-                setCategories(categories)
-            })
-    },
+    useEffect(
+        () => {
+            getAllCategories()
+                .then((categories) => {
+                    setCategories(categories)
+                })
+        },
         [])
 
-    useEffect(() => {
-        getAllTags()
-            .then((tags) => {
-                setTags(tags)
-            })
-    },
+    useEffect(
+        () => {
+            getAllTags()
+                .then((tags) => {
+                    setTags(tags)
+                })
+        },
         [])
+
+    useEffect(
+        () => {
+            getCurrentUser()
+                .then((data) => {
+                    if (data.user.is_staff) {
+                        setApproved(1)
+                    }
+                })
+        }, []
+    )
 
     useEffect(
         () => {
@@ -41,6 +56,7 @@ export const CreatePosts = ({ getPosts, editing }) => {
             }
         }, []
     )
+
 
     const handleControlledInputChange = (event) => {
         /*
@@ -67,7 +83,7 @@ export const CreatePosts = ({ getPosts, editing }) => {
     const submitPost = (e) => {
         e.preventDefault()
         let tagsToAdd = []
-        if(form.tags && form.tags.length > 0) {
+        if (form.tags && form.tags.length > 0) {
             tagsToAdd = form.tags.map(tag => tag.id)
         }
         const newPost = {
@@ -77,10 +93,10 @@ export const CreatePosts = ({ getPosts, editing }) => {
             publication_date: (new Date()).toISOString().split('T')[0],
             image_url: form.image_url,
             content: form.content,
-            approved: 1,
+            approved: approved,
             tags: tagsToAdd
         }
-        if(newPost.title && newPost.image_url && newPost.category_id) {
+        if (newPost.title && newPost.image_url && newPost.category_id) {
             if (editing) {
                 newPost.id = parseInt(postId)
                 return fetchIt(`${Settings.API}/posts/${postId}`, "PUT", JSON.stringify(newPost))

@@ -13,7 +13,7 @@ export const Post = ({ listView, cardView, post }) => {
     // const currentUser = parseInt(localStorage.getItem("token"))
 
     const dateFormat = (obj) => {
-        const copy = {...obj }
+        const copy = { ...obj }
         const dateArray = copy.publication_date.split('-')
         const dayArray = dateArray[2].split('T')
         const newDate = `${dateArray[1]}-${dayArray[0]}-${dateArray[0]}`
@@ -68,7 +68,8 @@ export const Post = ({ listView, cardView, post }) => {
                         <div>{post.category.label}</div>
                         <div>{post.tags?.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
                     </div>
-                    : <div key={`post--${post.id}`} className="postDetails">
+                    :
+                    <div key={`post--${post.id}`} className="postDetails">
                         <div className="postDetailsMain">
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
@@ -80,19 +81,20 @@ export const Post = ({ listView, cardView, post }) => {
                                 </div>
                                 <div>{post.title}</div>
                                 <div>{post.category.label}</div>
+                                <div className="approval">{post.approved ? "Approved" : "Not Approved"}</div>
                             </div>
-                            <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
+                            <div className="image-container"><img className="post-image" src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
                                 <div>By <Link to={`/users/${post.userId}`} >
                                     {post.user.user.username}
                                 </Link>
                                 </div>
                                 <div>
-                                {
-                                    showComments
-                                        ? <button onClick={() => { setShowComments(false) }}>Show Post</button>
-                                        : <button onClick={() => setShowComments(true)}>View Comments</button>
-                                }
+                                    {
+                                        showComments
+                                            ? <button onClick={() => { setShowComments(false) }}>Show Post</button>
+                                            : <button onClick={() => setShowComments(true)}>View Comments</button>
+                                    }
                                 </div>
                                 <div>Reactions</div>
                             </div>

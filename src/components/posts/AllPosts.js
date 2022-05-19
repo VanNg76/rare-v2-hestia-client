@@ -1,4 +1,4 @@
-import { getAllPosts, searchPostCategories, searchPostTitles, getPostsByTag } from "./PostManager"
+import { getAllApprovedPosts, searchPostCategories, searchPostTitles, getPostsByTag } from "./PostManager"
 import { getUserPosts } from "./PostManager"
 import React, { useEffect, useState } from "react";
 import { Post } from "./Post";
@@ -43,7 +43,7 @@ export const AllPosts = () => {
 
     useEffect(() => {
         if (filter.type === "all") {
-            getAllPosts()
+            getAllApprovedPosts()
                 .then((posts) => {
                     setPosts(posts)
                 })
@@ -53,7 +53,7 @@ export const AllPosts = () => {
         } else if (filter.type === "category") {
            searchPostCategories(parseInt(filter.value))
                 .then(setPosts)
-        } 
+        }
           // run category filter fetch with value
           else if (filter.type === "user") {
             getUserPosts(filter.value)
@@ -98,7 +98,7 @@ export const AllPosts = () => {
                 onChange={e => {
                     e.preventDefault()
                     if(e.target.value != "0") {
-                        let copy = JSON.parse(JSON.stringify(filter)) 
+                        let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "category"
                         copy.value = e.target.value
                         setFilterType(copy)
@@ -117,8 +117,8 @@ export const AllPosts = () => {
                 })}
             </select>
         </fieldset>
-        
-        
+
+
         {/* filter by user jsx */}
         <fieldset id="authorDropdown">
             <select
@@ -128,7 +128,7 @@ export const AllPosts = () => {
                 onChange={e => {
                     e.preventDefault()
                     if(e.target.value != "0") {
-                        let copy = JSON.parse(JSON.stringify(filter)) 
+                        let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "user"
                         copy.value = e.target.value
                         setFilterType(copy)
@@ -155,7 +155,7 @@ export const AllPosts = () => {
                 value={filter.type === "tag" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    let copy = JSON.parse(JSON.stringify(filter)) 
+                    let copy = JSON.parse(JSON.stringify(filter))
                     copy.type = "tag"
                     copy.value = e.target.value
                     setFilterType(copy)
@@ -187,7 +187,7 @@ export const AllPosts = () => {
                     return <div key={post.id} className="posts">
                         <Post listView={true} cardView={false} post={post} />
                     </div>
-                    // needs author name and category, publication date, content 
+                    // needs author name and category, publication date, content
                 })
                 : "No posts"
         }
