@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { getSubsForFollower } from "../users/SubManager"
 import { Post } from "./Post"
+import { getAllPosts } from "./PostManager"
 
 export const SubbedPosts = () => {
     const [subs, setSubs] = useState([{posts: []}])
@@ -11,6 +12,8 @@ export const SubbedPosts = () => {
         () => {
             getSubsForFollower(currentUser)
                 .then(setSubs)
+            getAllPosts()
+                .then(posts => setPosts(posts))
         },
         []
     )
@@ -19,8 +22,8 @@ export const SubbedPosts = () => {
         () => {
             let postArray = []
             for (const sub of subs) {
-                if(sub.posts) {
-                    for (const post of sub.posts) {
+                for (const post of posts) {
+                    if (sub.author_id === post.user_id) {
                         postArray.push(post)
                     }
                 }
