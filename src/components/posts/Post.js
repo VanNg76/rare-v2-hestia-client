@@ -5,10 +5,12 @@ import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
 
 import "./Post.css"
+import { updatePost } from "./PostManager"
 // function that renders a single post
-export const Post = ({ listView, cardView, post }) => {
+export const Post = ({ listView, cardView, post, currentUser, getPostsList }) => {
 
     const [showComments, setShowComments] = useState(false)
+    const [is_admin, setAdmin] = useState(false)
     const history = useHistory()
     // const currentUser = parseInt(localStorage.getItem("token"))
 
@@ -19,6 +21,24 @@ export const Post = ({ listView, cardView, post }) => {
         const newDate = `${dateArray[1]}-${dayArray[0]}-${dateArray[0]}`
         return newDate
     }
+
+    const adminApprovalSwitch = () => {
+        let copy = {...post}
+        copy.approved = !copy.approved
+        updatePost(copy)
+        .then(getPostsList())
+    }
+
+    useEffect(
+        () => {
+            if (listView) {
+                if (currentUser?.user.is_staff === true) {
+                    setAdmin(true)
+                }
+            }
+        },
+        [listView, currentUser]
+    )
 
     return <>
         {/* Content needed in all posts list */}
@@ -44,7 +64,7 @@ export const Post = ({ listView, cardView, post }) => {
                             {
                                 post.is_author
                                     ? <div className="cardButtons">
-                                        <ButtonControls isPost={true} postId={post.id} />
+                                        <ButtonControls isPost={true} isUser={false} postId={post.id} />
                                     </div>
                                     : null
                             }
@@ -53,6 +73,15 @@ export const Post = ({ listView, cardView, post }) => {
                 </div>
                 : listView
                     ? <div key={`post--${post.id}`} className="singlePost">
+                        {is_admin ?
+                            <div>
+                                <button className={post.approved ? "un-approve-button" : "approve-button"}
+                                onClick={adminApprovalSwitch}>
+                                {post.approved ? "Un-approve" : "Approve"}
+                                </button>
+                            </div>
+                            : ""
+                        }
                         <div>
                             <Link to={`/posts/single/${post.id}`}>
                                 {post.title}

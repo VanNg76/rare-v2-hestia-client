@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { fetchIt } from "../utils/Fetch"
 import { Settings } from "../utils/Settings"
 import { getAllTags } from "../tags/TagManager";
-import { getAllPosts, getSinglePost } from "./PostManager";
+import { addPost, getAllPosts, getSinglePost, updatePost } from "./PostManager";
 import { getAllCategories } from "../categories/CategoryManager";
 import { getCurrentUser } from "../users/UserManager";
 import { useParams } from "react-router-dom";
@@ -99,10 +99,10 @@ export const CreatePosts = ({ getPosts, editing }) => {
         if (newPost.title && newPost.image_url && newPost.category_id) {
             if (editing) {
                 newPost.id = parseInt(postId)
-                return fetchIt(`${Settings.API}/posts/${postId}`, "PUT", JSON.stringify(newPost))
+                updatePost(newPost)
                     .then(() => history.push(`/posts/single/${postId}`))
             } else {
-                return fetchIt(`${Settings.API}/posts`, "POST", JSON.stringify(newPost))
+                addPost(newPost)
                     .then((sentPost) => history.push(`/posts/single/${sentPost.id}`))
             }
         } else {

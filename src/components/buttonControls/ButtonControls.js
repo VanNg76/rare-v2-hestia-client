@@ -107,7 +107,7 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
             history.push(`/editComment/${commentId}`)
           }
         }}>
-        {!isUser ?
+        {!isUser  ?
           isCategory ?
             <div>Edit</div>
             :
