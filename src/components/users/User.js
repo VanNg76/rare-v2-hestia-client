@@ -105,6 +105,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                             isUser={true}
                             adminEdit={false}
                             user={user}
+                            currentUser={currentUser}
                             deactivate={deactivate}
                             reactivate={reactivate}
                         />
@@ -127,6 +128,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                             isUser={true}
                             adminEdit={true}
                             user={user}
+                            currentUser={currentUser}
                             addAdmin={addAdmin}
                             removeAdmin={removeAdmin}
                         />
