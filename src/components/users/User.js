@@ -7,7 +7,7 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import "./User.css"
-import { getSingleUser, reactivateUser, deactivateUser } from "./UserManager"
+import { getSingleUser, reactivateUser, deactivateUser, promoteUser, demoteUser } from "./UserManager"
 import { Link } from "react-router-dom"
 import { SubForm } from "./SubForm"
 import { ButtonControls } from "../buttonControls/ButtonControls"
@@ -34,6 +34,16 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
         copy.active = true
         setViewUser(copy)
         reactivateUser(copy)
+            .then(() => getUsers())
+    }
+
+    const addAdmin = () => {
+        promoteUser(user)
+            .then(() => getUsers())
+    }
+
+    const removeAdmin = () => {
+        demoteUser(user)
             .then(() => getUsers())
     }
 
@@ -99,6 +109,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                             isPost={false}
                             isComment={false}
                             isUser={true}
+                            adminEdit={false}
                             user={user}
                             deactivate={deactivate}
                             reactivate={reactivate}
@@ -113,7 +124,21 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                 </div>
                 <div>{user.user.first_name}</div>
                 <div>{user.user.last_name}</div>
-                <div>{user.user.is_staff ? "Admin" : "Author"}</div>
+                <div>{user.is_admin ? "Admin" : "Author"}</div>
+                {is_admin ?
+                    <div>
+                        <ButtonControls
+                            isPost={false}
+                            isComment={false}
+                            isUser={true}
+                            adminEdit={true}
+                            user={user}
+                            addAdmin={addAdmin}
+                            removeAdmin={removeAdmin}
+                        />
+                    </div>
+                    : ""
+                }
             </div>
 
             : viewUser
