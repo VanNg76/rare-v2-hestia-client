@@ -9,7 +9,7 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
   const history = useHistory()
 
   return <div>
-    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : isComment ? `anything-${commentId}` : adminEdit ? `anything-${user.user.username}` :`anything-${user.id}`}>
+    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : isComment ? `anything-${commentId}` : adminEdit ? `anything-${user.user.username}` : `anything-${user.id}`}>
       {
         isPost
           ? <div>Are you sure you want to delete this post?</div>
@@ -67,9 +67,14 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
               }
               else if (adminEdit) {
                 if (user.is_admin) {
-                  removeAdmin()
-                  const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
-                  buttonTarget.close()
+                  if (user.admin_count > 1) {
+                    removeAdmin()
+                    const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+                    buttonTarget.close()
+                  }
+                  else {
+                    alert("You must pass admin privileges to another user before removing the last admin")
+                  }
                 }
                 else {
                   addAdmin()
