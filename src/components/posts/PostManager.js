@@ -82,3 +82,7 @@ export const searchPostTitles = titleString => {
 export const searchPostCategories = categoryId => {
   return fetchIt(`http://localhost:8088/posts?category=${categoryId}`)
 };
+
+export const getAllPostReactions = () => {
+  return fetchIt(`${Settings.API}/postreactions`)
+};

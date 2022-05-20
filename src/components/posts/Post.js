@@ -3,15 +3,19 @@ import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
-
+import { getAllPostReactions, updatePost } from "./PostManager"
+import { getAllReactions } from "../reaction/ReactionManager"
 import "./Post.css"
-import { updatePost } from "./PostManager"
+
 // function that renders a single post
 export const Post = ({ listView, cardView, post, currentUser, getPostsList }) => {
 
     const [showComments, setShowComments] = useState(false)
     const [is_admin, setAdmin] = useState(false)
     const history = useHistory()
+    const [postReactions, setPostReactions] = useState([])
+    const [filteredPostReactions, setFilteredPostReactions] = useState([])
+    const [reactions, setReactions] = useState([])
     // const currentUser = parseInt(localStorage.getItem("token"))
 
     const dateFormat = (obj) => {
@@ -28,6 +32,23 @@ export const Post = ({ listView, cardView, post, currentUser, getPostsList }) =>
         updatePost(copy)
         .then(getPostsList())
     }
+
+    useEffect(() => {
+        getAllReactions()
+            .then(setReactions)
+    }, [])
+
+    useEffect(() => {
+        getAllPostReactions()
+            .then(setPostReactions)
+    }, [])
+
+    useEffect(() => {
+        if (postReactions.length > 0) {
+            let postArray = postReactions.filter(pr => pr.post.id === post.id)
+            setFilteredPostReactions(postArray)
+        }
+    }, [postReactions, post])
 
     useEffect(
         () => {
@@ -60,7 +81,9 @@ export const Post = ({ listView, cardView, post, currentUser, getPostsList }) =>
                     <div className="cardBottom">
                         <div>Author: {post.user.user.first_name} {post.user.user.last_name}</div>
                         <div className="cardFunctions">
-                            <div>Reaction Count: 0</div>
+                            <div>Reaction Count: {filteredPostReactions.length}
+
+                            </div>
                             {
                                 post.is_author
                                     ? <div className="cardButtons">
@@ -125,7 +148,14 @@ export const Post = ({ listView, cardView, post, currentUser, getPostsList }) =>
                                             : <button onClick={() => setShowComments(true)}>View Comments</button>
                                     }
                                 </div>
-                                <div>Reactions</div>
+                                <div>Reactions: 
+                                    {
+                                        filteredPostReactions?.map(pr => {
+                                            const findReaction = reactions?.find(reaction => reaction.id === pr.reaction.id)
+                                            return " " + findReaction.label + "  "
+                                        })
+                                    }
+                                </div>
                             </div>
                             {
                                 showComments
