@@ -1,27 +1,25 @@
 import { useEffect, useState } from "react"
 import { addSub, deleteSub, getSubsForFollower } from "./SubManager"
+import { getCurrentUser } from "./UserManager"
 
 
 export const SubForm = ({ author }) => {
     const [subbed, setSubbed] = useState(false)
     const [subs, setSubs] = useState([])
     const [currentSub, setCurrentSub] = useState({})
-    const [currentUser, setCurrentUser] = useState(0)
+    const [currentUser, setCurrentUser] = useState()
 
 
-    useEffect(
-        () => {
-            let userId = localStorage.getItem("token")
-            setCurrentUser(userId)
-        },
-        []
-    )
+    useEffect(() => {
+            getCurrentUser()
+                .then(setCurrentUser)
+    }, [])
 
     useEffect(
         () => {
-            if (currentUser > 0) {
-                getSubsForFollower(currentUser)
-                    .then(subData => setSubs(subData))
+            if (currentUser) {
+                getSubsForFollower(currentUser.id)
+                    .then(setSubs)
             }
         }, [currentUser]
     )
@@ -30,26 +28,27 @@ export const SubForm = ({ author }) => {
         if (subs && subs.length > 0) {
             let isSubbed = false
             for (const sub of subs) {
-                if (sub.authorId === author.id) {
+                if (sub.author.id === author.id) {
                     isSubbed = true
                     setCurrentSub(sub)
                 }
             }
             setSubbed(isSubbed)
         }
-    }, [subs])
+    }, [subs, currentUser])
 
     const handleSub = (e) => {
         if (subbed) {
             deleteSub(currentSub.id)
                 .then(setSubbed(false))
         } else {
-            let userId = parseInt(currentUser)
+            let userId = currentUser.id
             if (userId != author.id) {
                 let new_subscription = {
-                    followerId: parseInt(currentUser),
-                    authorId: author.id,
-                    createdOn: (new Date()).toISOString().split('T')[0]
+                    follower_id: currentUser.id,
+                    author_id: author.id,
+                    created_on: (new Date()).toISOString().split('T')[0],
+                    ended_on: (new Date()).toISOString().split('T')[0]
                 }
                 addSub(new_subscription)
                     .then(returnedSub => {
@@ -64,7 +63,7 @@ export const SubForm = ({ author }) => {
 
     return <div>
         {
-            parseInt(currentUser) != author.id
+            currentUser?.id !== author.id
                 ? <button
                     className="subButton"
                     onClick={(e) => {
