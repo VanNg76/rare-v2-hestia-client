@@ -173,14 +173,17 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
     {isUser ?
       adminEdit ?
         user.is_admin ?
-          <button
-            className="demote"
-            onClick={() => {
-              const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
-              buttonTarget.showModal()
-            }}>
-            Demote
-          </button>
+          <div>
+            <button
+              className="demote"
+              onClick={() => {
+                const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+                buttonTarget.showModal()
+              }}>
+              Demote
+            </button>
+            <h2>Admins approved: {user.admin_approval}</h2>
+          </div>
           :
           <button
             className="promote"
@@ -192,14 +195,17 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
           </button>
         :
         user.active ?
-          <button
-            className="deactivate"
-            onClick={() => {
-              const buttonTarget = document.querySelector(`#anything-${user.id}`)
-              buttonTarget.showModal()
-            }}>
-            Deactivate
-          </button>
+          <div>
+            <button
+              className="deactivate"
+              onClick={() => {
+                const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                buttonTarget.showModal()
+              }}>
+              Deactivate
+            </button>
+            <h2>Admins approved: {user.admin_approval}</h2>
+          </div>
           :
           <button
             className="reactivate"
