@@ -22,18 +22,12 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
     const { userId } = useParams()
 
     const deactivate = () => {
-        let copy = { ...user }
-        copy.active = false
-        setViewUser(copy)
-        deactivateUser(copy)
+        deactivateUser(user)
             .then(() => getUsers())
     }
 
     const reactivate = () => {
-        let copy = { ...user }
-        copy.active = true
-        setViewUser(copy)
-        reactivateUser(copy)
+        reactivateUser(user)
             .then(() => getUsers())
     }
 
@@ -111,6 +105,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                             isUser={true}
                             adminEdit={false}
                             user={user}
+                            currentUser={currentUser}
                             deactivate={deactivate}
                             reactivate={reactivate}
                         />
@@ -133,6 +128,7 @@ export const User = ({ listView, user, currentUser, getUsers }) => {
                             isUser={true}
                             adminEdit={true}
                             user={user}
+                            currentUser={currentUser}
                             addAdmin={addAdmin}
                             removeAdmin={removeAdmin}
                         />

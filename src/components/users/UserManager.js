@@ -24,11 +24,11 @@ export const getCurrentUser = () => {
 }
 
 export const deactivateUser = (user) => {
-    return fetchIt(`${Settings.API}/users/${user.id}/deactivate`, "PUT", JSON.stringify(user))
+    return fetchIt(`${Settings.API}/users/${user.id}/deactivate`, "PUT")
 }
 
 export const reactivateUser = (user) => {
-    return fetchIt(`${Settings.API}/users/${user.id}/reactivate`, "PUT", JSON.stringify(user))
+    return fetchIt(`${Settings.API}/users/${user.id}/reactivate`, "PUT")
 }
 
 export const promoteUser = (user) => {

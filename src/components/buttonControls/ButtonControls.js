@@ -5,7 +5,7 @@ import { deleteCategory } from "../categories/CategoryManager"
 import { useHistory } from "react-router-dom"
 import "./ButtonControls.css"
 
-export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdit, postId, commentId, categoryId, user, removeComment, getCategories, deactivate, reactivate, removeAdmin, addAdmin }) => {
+export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdit, postId, commentId, categoryId, user, removeComment, getCategories, deactivate, reactivate, removeAdmin, addAdmin, currentUser }) => {
   const history = useHistory()
 
   return <div>
@@ -67,13 +67,13 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
               }
               else if (adminEdit) {
                 if (user.is_admin) {
-                  if (user.admin_count > 1) {
+                  if (user.admin_approval === currentUser.id) {
+                    alert("You've already approved this demotion, another admin must be the other approval.")
+                  }
+                  else {
                     removeAdmin()
                     const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
                     buttonTarget.close()
-                  }
-                  else {
-                    alert("You must pass admin privileges to another user before removing the last admin")
                   }
                 }
                 else {
@@ -84,9 +84,14 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
               }
               else if (isUser && !adminEdit) {
                 if (user.active) {
-                  deactivate()
-                  const buttonTarget = document.querySelector(`#anything-${user.id}`)
-                  buttonTarget.close()
+                  if (user.admin_approval === currentUser.id) {
+                    alert("You've already approved this deactivation, another admin must be the other approval.")
+                  }
+                  else {
+                    deactivate()
+                    const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                    buttonTarget.close()
+                  }
                 }
                 else {
                   reactivate()
@@ -173,14 +178,17 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
     {isUser ?
       adminEdit ?
         user.is_admin ?
-          <button
-            className="demote"
-            onClick={() => {
-              const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
-              buttonTarget.showModal()
-            }}>
-            Demote
-          </button>
+          <div>
+            <button
+              className="demote"
+              onClick={() => {
+                const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+                buttonTarget.showModal()
+              }}>
+              Demote
+            </button>
+            <h2>Admins approved: {user.admin_approval == 0 ? "0" : "1"}</h2>
+          </div>
           :
           <button
             className="promote"
@@ -192,14 +200,17 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdi
           </button>
         :
         user.active ?
-          <button
-            className="deactivate"
-            onClick={() => {
-              const buttonTarget = document.querySelector(`#anything-${user.id}`)
-              buttonTarget.showModal()
-            }}>
-            Deactivate
-          </button>
+          <div>
+            <button
+              className="deactivate"
+              onClick={() => {
+                const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                buttonTarget.showModal()
+              }}>
+              Deactivate
+            </button>
+            <h2>Admins approved: {user.admin_approval == 0 ? "0" : "1"}</h2>
+          </div>
           :
           <button
             className="reactivate"
