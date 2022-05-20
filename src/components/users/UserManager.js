@@ -30,3 +30,11 @@ export const deactivateUser = (user) => {
 export const reactivateUser = (user) => {
     return fetchIt(`${Settings.API}/users/${user.id}/reactivate`, "PUT", JSON.stringify(user))
 }
+
+export const promoteUser = (user) => {
+    return fetchIt(`${Settings.API}/users/${user.id}/promote`, "PUT")
+}
+
+export const demoteUser = (user) => {
+    return fetchIt(`${Settings.API}/users/${user.id}/demote`, "PUT")
+}

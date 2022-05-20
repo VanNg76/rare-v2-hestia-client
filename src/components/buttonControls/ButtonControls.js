@@ -5,11 +5,11 @@ import { deleteCategory } from "../categories/CategoryManager"
 import { useHistory } from "react-router-dom"
 import "./ButtonControls.css"
 
-export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, commentId, categoryId, user, removeComment, getCategories, deactivate, reactivate }) => {
+export const ButtonControls = ({ isPost, isCategory, isComment, isUser, adminEdit, postId, commentId, categoryId, user, removeComment, getCategories, deactivate, reactivate, removeAdmin, addAdmin }) => {
   const history = useHistory()
 
   return <div>
-    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : isComment ? `anything-${commentId}` : `anything-${user.id}`}>
+    <dialog id={isPost ? `anything-${postId}` : isCategory ? `anything-${categoryId}` : isComment ? `anything-${commentId}` : adminEdit ? `anything-${user.user.username}` :`anything-${user.id}`}>
       {
         isPost
           ? <div>Are you sure you want to delete this post?</div>
@@ -19,9 +19,18 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
             :
             isComment
               ? <div>Are you sure you want to delete this comment?</div>
-              : user.active
-                ? <div>Are you sure you want to deactivate this user?</div>
-                : <div>Are you sure you want to reactivate this user?</div>
+              :
+              isUser
+                ?
+                adminEdit
+                  ? user.is_admin
+                    ? <div>Are you sure you want to remove admin privileges from this user?</div>
+                    : <div>Are you sure you want to give admin privileges to this user?</div>
+                  :
+                  user.active
+                    ? <div>Are you sure you want to deactivate this user?</div>
+                    : <div>Are you sure you want to reactivate this user?</div>
+                : null
       }
 
       <div>
@@ -53,19 +62,31 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
               }
               else if (isComment) {
                 removeComment(commentId)
-                      const buttonTarget = document.querySelector(`#anything-${commentId}`)
-                      buttonTarget.close()
+                const buttonTarget = document.querySelector(`#anything-${commentId}`)
+                buttonTarget.close()
               }
-              else {
+              else if (adminEdit) {
+                if (user.is_admin) {
+                  removeAdmin()
+                  const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+                  buttonTarget.close()
+                }
+                else {
+                  addAdmin()
+                  const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+                  buttonTarget.close()
+                }
+              }
+              else if (isUser && !adminEdit) {
                 if (user.active) {
                   deactivate()
-                        const buttonTarget = document.querySelector(`#anything-${user.id}`)
-                        buttonTarget.close()
+                  const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                  buttonTarget.close()
                 }
                 else {
                   reactivate()
-                        const buttonTarget = document.querySelector(`#anything-${user.id}`)
-                        buttonTarget.close()
+                  const buttonTarget = document.querySelector(`#anything-${user.id}`)
+                  buttonTarget.close()
                 }
               }
             }
@@ -83,6 +104,9 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
                 buttonTarget.close()
               } else if (isComment) {
                 const buttonTarget = document.querySelector(`#anything-${commentId}`)
+                buttonTarget.close()
+              } else if (adminEdit) {
+                const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
                 buttonTarget.close()
               } else {
                 const buttonTarget = document.querySelector(`#anything-${user.id}`)
@@ -107,7 +131,7 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
             history.push(`/editComment/${commentId}`)
           }
         }}>
-        {!isUser  ?
+        {!isUser ?
           isCategory ?
             <div>Edit</div>
             :
@@ -142,24 +166,44 @@ export const ButtonControls = ({ isPost, isCategory, isComment, isUser, postId, 
       : ""
     }
     {isUser ?
-      user.active ?
-        <button
-          className="deactivate"
-          onClick={() => {
-            const buttonTarget = document.querySelector(`#anything-${user.id}`)
-            buttonTarget.showModal()
-          }}>
-          Deactivate
-        </button>
+      adminEdit ?
+        user.is_admin ?
+          <button
+            className="demote"
+            onClick={() => {
+              const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+              buttonTarget.showModal()
+            }}>
+            Demote
+          </button>
+          :
+          <button
+            className="promote"
+            onClick={() => {
+              const buttonTarget = document.querySelector(`#anything-${user.user.username}`)
+              buttonTarget.showModal()
+            }}>
+            Promote
+          </button>
         :
-        <button
-          className="reactivate"
-          onClick={() => {
-            const buttonTarget = document.querySelector(`#anything-${user.id}`)
-            buttonTarget.showModal()
-          }}>
-          Reactivate
-        </button>
+        user.active ?
+          <button
+            className="deactivate"
+            onClick={() => {
+              const buttonTarget = document.querySelector(`#anything-${user.id}`)
+              buttonTarget.showModal()
+            }}>
+            Deactivate
+          </button>
+          :
+          <button
+            className="reactivate"
+            onClick={() => {
+              const buttonTarget = document.querySelector(`#anything-${user.id}`)
+              buttonTarget.showModal()
+            }}>
+            Reactivate
+          </button>
       : ""
     }
   </div >
